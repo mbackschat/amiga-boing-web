@@ -1,0 +1,85 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: #000;
+  overflow: hidden;
+}
+
+/* #demo is the demo's "logical" 1280×800 viewport. JS sets `left`, `top`,
+   and `transform: scale(...)` from window dimensions so the demo always fits
+   the viewport without clipping, with integer scaling at 1280×800 or larger
+   and a single `scale()` transform when the window is smaller. */
+#demo {
+  position: fixed;
+  width: 1280px;
+  height: 984px;
+  overflow: hidden;
+  cursor: none; /* hide native pointer; Amiga sprite takes over */
+  transform-origin: top left;
+  background: #aaaaaa; /* sky color — fills the strip below the canvas */
+}
+
+#screen {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1280px;
+  height: 864px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* Workbench layer: native 640×200 (de-interlaced + cropped from the original
+   PAL hi-res interlaced 640×512 source — see specs/workbench/retouch.py),
+   CSS-scaled 2× horizontal / 4× vertical to 1280×800. Same vertical density
+   as Boing's lo-res, half-wide pixels horizontally — the canonical Amiga
+   hi-res non-interlaced look (Copper mode-switch in browser idioms).
+   `top` is bound to `splitY` from JS so the whole image translates with
+   the drag, exactly like an Amiga screen-drag. */
+#workbench {
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1280px;
+  height: 1024px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  user-select: none;
+  -webkit-user-drag: none;
+  z-index: 5;
+}
+
+#cursor {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 32px;
+  height: 32px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  pointer-events: none; /* never intercepts clicks */
+  z-index: 10;
+  display: none;
+}
+
+/* Ghosted discoverability hint shown for ~2s on every A→B transition.
+   Fade is CSS — the workbench module re-triggers it by snapping opacity to
+   1 with `transition: none`, then on the next frame restoring the
+   transition and setting opacity back to 0. */
+#hint {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 14px;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  transition: opacity 1500ms ease 500ms;
+  pointer-events: none;
+  z-index: 8;
+  white-space: nowrap;
+}

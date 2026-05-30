@@ -1,0 +1,4 @@
+[submodule "vendor/amiga-boing"]
+	path = vendor/amiga-boing
+	url = https://github.com/mbackschat/amiga-boing
+	branch = main
